@@ -1,6 +1,47 @@
 @extends('layouts.admin')
-@section('title', 'Appointments') @section('page-title', 'Appointments') @section('page-actions')<a class="btn btn-primary" href="{{ route('admin.appointments.create') }}">Add appointment</a>@endsection
+@section('title', 'Appointments') @section('page-title', 'Appointments') @section('page-actions')<a class="btn btn-primary" href="{{ route('admin.appointments.create') }}">
+Add appointment</a>@endsection
 @section('body')
-<form class="row g-2 mb-3"><div class="col-sm-3"><input class="form-control" type="date" name="date" value="{{ request('date') }}"></div><div class="col-sm-3"><select class="form-select" name="status"><option value="">All statuses</option>@foreach(['pending','approved','completed','cancelled'] as $status)<option value="{{ $status }}" @selected(request('status') === $status)>{{ ucfirst($status) }}</option>@endforeach</select></div><div class="col-auto"><button class="btn btn-outline-primary">Filter</button></div></form>
-<div class="card shadow-sm border-0"><div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>Date & time</th><th>Patient</th><th>Doctor</th><th>Status</th><th class="text-end">Actions</th></tr></thead><tbody>@forelse($appointments as $appointment)<tr><td>{{ $appointment->appointment_date->format('d M Y') }}<div class="small text-body-secondary">{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('h:i A') }}</div></td><td>{{ $appointment->patient->name }}</td><td>Dr. {{ $appointment->doctor->name }}<div class="small text-body-secondary">{{ $appointment->doctor->doctorProfile?->specialization }}</div></td><td><span class="badge text-bg-secondary text-capitalize">{{ $appointment->status }}</span></td><td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ route('admin.appointments.edit', $appointment) }}">Edit</a></td></tr>@empty<tr><td colspan="5" class="text-center py-4 text-body-secondary">No appointments found.</td></tr>@endforelse</tbody></table></div></div><div class="mt-3">{{ $appointments->links() }}</div>
+<form class="row g-2 mb-3">
+    <div class="col-sm-3"><input class="form-control" type="date" name="date" value="{{ request('date') }}"></div>
+    <div class="col-sm-3"><select class="form-select" name="status">
+            <option value="">All statuses</option>
+            @foreach (['pending', 'approved', 'completed', 'cancelled'] as $status)
+                <option value="{{ $status }}" @selected(request('status') === $status)>{{ ucfirst($status) }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-auto"><button class="btn btn-outline-primary">Filter</button></div>
+</form>
+<div class="card shadow-sm border-0">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Date & time</th>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($appointments as $appointment)
+                    <tr>
+                        <td>{{ $appointment->appointment_date->format('d M Y') }}<div class="small text-body-secondary">{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('h:i A') }}</div>
+                        </td>
+                        <td>{{ $appointment->patient->name }}</td>
+                        <td>Dr. {{ $appointment->doctor->name }}<div class="small text-body-secondary">{{ $appointment->doctor->doctorProfile?->specialization }}</div>
+                        </td>
+                        <td><span class="badge text-bg-secondary text-capitalize">{{ $appointment->status }}</span></td>
+                        <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ route('admin.appointments.edit', $appointment) }}">Edit</a></td>
+                </tr>@empty<tr>
+                        <td colspan="5" class="text-center py-4 text-body-secondary">No appointments found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="mt-3">{{ $appointments->links() }}</div>
 @endsection

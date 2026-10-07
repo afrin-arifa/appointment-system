@@ -1,6 +1,38 @@
 @extends('layouts.admin')
-@section('title', 'Patients') @section('page-title', 'Patients') @section('page-actions')<a class="btn btn-primary" href="{{ route('admin.patients.create') }}">Add patient</a>@endsection
+@section('title', 'Patients') @section('page-title', 'Patients') @section('page-actions')<a class="btn btn-primary" href="{{ route('admin.patients.create') }}">
+Add patient</a>@endsection
 @section('body')
-<form class="row g-2 mb-3"><div class="col-md-5"><input class="form-control" name="search" value="{{ request('search') }}" placeholder="Search name or email"></div><div class="col-auto"><button class="btn btn-outline-primary">Search</button></div></form>
-<div class="card shadow-sm border-0"><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>Name</th><th>Email</th><th>Appointments</th><th>Joined</th><th class="text-end">Actions</th></tr></thead><tbody>@forelse($patients as $patient)<tr><td>{{ $patient->name }}</td><td>{{ $patient->email }}</td><td>{{ $patient->patient_appointments_count }}</td><td>{{ $patient->created_at->format('d M Y') }}</td><td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ route('admin.patients.edit', $patient) }}">Edit</a></td></tr>@empty<tr><td colspan="5" class="text-center py-4 text-body-secondary">No patients found.</td></tr>@endforelse</tbody></table></div></div><div class="mt-3">{{ $patients->links() }}</div>
+<form class="row g-2 mb-3">
+    <div class="col-md-5"><input class="form-control" name="search" value="{{ request('search') }}" placeholder="Search name or email"></div>
+    <div class="col-auto"><button class="btn btn-outline-primary">Search</button></div>
+</form>
+<div class="card shadow-sm border-0">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Appointments</th>
+                    <th>Joined</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($patients as $patient)
+                    <tr>
+                        <td>{{ $patient->name }}</td>
+                        <td>{{ $patient->email }}</td>
+                        <td>{{ $patient->patient_appointments_count }}</td>
+                        <td>{{ $patient->created_at->format('d M Y') }}</td>
+                        <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ route('admin.patients.edit', $patient) }}">Edit</a></td>
+                </tr>@empty<tr>
+                        <td colspan="5" class="text-center py-4 text-body-secondary">No patients found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="mt-3">{{ $patients->links() }}</div>
 @endsection

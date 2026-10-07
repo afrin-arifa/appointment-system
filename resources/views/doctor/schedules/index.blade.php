@@ -1,6 +1,40 @@
 @extends('layouts.app')
 @section('title', 'My Schedules')
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4"><div><h1 class="h2 mb-1">My schedules</h1><p class="text-body-secondary mb-0">Set times patients can book.</p></div><a class="btn btn-primary" href="{{ route('doctor.schedules.create') }}">Add schedule</a></div>
-<div class="card shadow-sm border-0"><div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>Date</th><th>Time</th><th>Duration</th><th>Status</th><th class="text-end">Actions</th></tr></thead><tbody>@forelse($schedules as $schedule)<tr><td>{{ $schedule->available_date->format('d M Y') }}</td><td>{{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }} – {{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i A') }}</td><td>{{ $schedule->appointment_duration }} min</td><td><span class="badge text-bg-{{ $schedule->is_available ? 'success' : 'secondary' }}">{{ $schedule->is_available ? 'Available' : 'Unavailable' }}</span></td><td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ route('doctor.schedules.edit', $schedule) }}">Edit</a> <form class="d-inline" action="{{ route('doctor.schedules.destroy', $schedule) }}" method="POST" onsubmit="return confirm('Delete this schedule?');">@csrf @method('DELETE')<button class="btn btn-sm btn-outline-danger">Delete</button></form></td></tr>@empty<tr><td colspan="5" class="text-center py-4 text-body-secondary">No schedules yet.</td></tr>@endforelse</tbody></table></div></div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2 mb-1">My schedules</h1>
+            <p class="text-body-secondary mb-0">Set times patients can book.</p>
+        </div><a class="btn btn-primary" href="{{ route('doctor.schedules.create') }}">Add schedule</a>
+    </div>
+    <div class="card shadow-sm border-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Duration</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($schedules as $schedule)
+                        <tr>
+                            <td>{{ $schedule->available_date->format('d M Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }} – {{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i A') }}</td>
+                            <td>{{ $schedule->appointment_duration }} min</td>
+                            <td><span class="badge text-bg-{{ $schedule->is_available ? 'success' : 'secondary' }}">{{ $schedule->is_available ? 'Available' : 'Unavailable' }}</span></td>
+                            <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ route('doctor.schedules.edit', $schedule) }}">Edit</a>
+                                <form class="d-inline" action="{{ route('doctor.schedules.destroy', $schedule) }}" method="POST" onsubmit="return confirm('Delete this schedule?');">@csrf @method('DELETE')<button class="btn btn-sm btn-outline-danger">Delete</button></form>
+                            </td>
+                    </tr>@empty<tr>
+                            <td colspan="5" class="text-center py-4 text-body-secondary">No schedules yet.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
 @endsection

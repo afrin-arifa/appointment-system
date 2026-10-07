@@ -1,6 +1,55 @@
 @extends('layouts.app')
 @section('title', 'Appointments')
 @section('content')
-<h1 class="h2 mb-4">Appointments</h1><form class="row g-2 mb-3"><div class="col-sm-3"><select class="form-select" name="status"><option value="">All statuses</option>@foreach(['pending','approved','completed','cancelled'] as $status)<option value="{{ $status }}" @selected(request('status') === $status)>{{ ucfirst($status) }}</option>@endforeach</select></div><div class="col-auto"><button class="btn btn-outline-primary">Filter</button></div></form>
-<div class="card shadow-sm border-0"><div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>Date & time</th><th>Patient</th><th>Symptoms</th><th>Status</th><th>Update</th></tr></thead><tbody>@forelse($appointments as $appointment)<tr><td>{{ $appointment->appointment_date->format('d M Y') }}<div class="small text-body-secondary">{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('h:i A') }}</div></td><td>{{ $appointment->patient->name }}<div class="small text-body-secondary">{{ $appointment->patient->email }}</div></td><td>{{ $appointment->symptoms ?: '—' }}</td><td><span class="badge text-bg-secondary text-capitalize">{{ $appointment->status }}</span></td><td>@if(in_array($appointment->status, ['pending','approved']))<form action="{{ route('doctor.appointments.status.update', $appointment) }}" method="POST" class="d-flex gap-1">@csrf @method('PATCH')<select class="form-select form-select-sm" name="status"><option value="approved">Approve</option><option value="completed">Complete</option><option value="cancelled">Cancel</option></select><button class="btn btn-sm btn-primary">Save</button></form>@endif</td></tr>@empty<tr><td colspan="5" class="text-center py-4 text-body-secondary">No appointments found.</td></tr>@endforelse</tbody></table></div></div><div class="mt-3">{{ $appointments->links() }}</div>
+    <h1 class="h2 mb-4">
+        Appointments</h1>
+    <form class="row g-2 mb-3">
+        <div class="col-sm-3"><select class="form-select" name="status">
+                <option value="">All statuses</option>
+                @foreach (['pending', 'approved', 'completed', 'cancelled'] as $status)
+                    <option value="{{ $status }}" @selected(request('status') === $status)>{{ ucfirst($status) }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-auto"><button class="btn btn-outline-primary">Filter</button></div>
+    </form>
+    <div class="card shadow-sm border-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Date & time</th>
+                        <th>Patient</th>
+                        <th>Symptoms</th>
+                        <th>Status</th>
+                        <th>Update</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($appointments as $appointment)
+                        <tr>
+                            <td>{{ $appointment->appointment_date->format('d M Y') }}<div class="small text-body-secondary">{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('h:i A') }}</div>
+                            </td>
+                            <td>{{ $appointment->patient->name }}<div class="small text-body-secondary">{{ $appointment->patient->email }}</div>
+                            </td>
+                            <td>{{ $appointment->symptoms ?: '—' }}</td>
+                            <td><span class="badge text-bg-secondary text-capitalize">{{ $appointment->status }}</span></td>
+                            <td>
+                                @if (in_array($appointment->status, ['pending', 'approved']))
+                                    <form action="{{ route('doctor.appointments.status.update', $appointment) }}" method="POST" class="d-flex gap-1">@csrf @method('PATCH')<select class="form-select form-select-sm" name="status">
+                                            <option value="approved">Approve</option>
+                                            <option value="completed">Complete</option>
+                                            <option value="cancelled">Cancel</option>
+                                        </select><button class="btn btn-sm btn-primary">Save</button></form>
+                                @endif
+                            </td>
+                    </tr>@empty<tr>
+                            <td colspan="5" class="text-center py-4 text-body-secondary">No appointments found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="mt-3">{{ $appointments->links() }}</div>
 @endsection

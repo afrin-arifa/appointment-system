@@ -1,7 +1,36 @@
 @extends('layouts.app')
 @section('title', 'Find Doctors')
 @section('content')
-<div class="mb-4"><h1 class="h2 mb-1">Find a doctor</h1><p class="text-body-secondary mb-0">Search by doctor name or specialization.</p></div>
-<form class="row g-2 mb-4"><div class="col-md-5"><input class="form-control" name="search" value="{{ request('search') }}" placeholder="Name or specialization"></div><div class="col-md-4"><select class="form-select" name="specialization"><option value="">All specializations</option>@foreach($specializations as $specialization)<option value="{{ $specialization }}" @selected(request('specialization') === $specialization)>{{ $specialization }}</option>@endforeach</select></div><div class="col-auto"><button class="btn btn-outline-primary">Search</button></div></form>
-<div class="row g-3">@forelse($doctors as $doctor)<div class="col-md-6 col-xl-4"><div class="card h-100 shadow-sm border-0"><div class="card-body d-flex flex-column"><h2 class="h5">Dr. {{ $doctor->name }}</h2><p class="text-primary mb-2">{{ $doctor->doctorProfile?->specialization }}</p><p class="small text-body-secondary mb-1">{{ $doctor->doctorProfile?->experience }} years experience</p><p class="small text-body-secondary">Consultation fee: ৳{{ number_format($doctor->doctorProfile?->consultation_fee ?? 0, 2) }}</p><a class="btn btn-primary mt-auto" href="{{ route('patient.doctors.show', $doctor) }}">View availability</a></div></div></div>@empty<div class="col"><div class="alert alert-info">No doctors match your search.</div></div>@endforelse</div><div class="mt-4">{{ $doctors->links() }}</div>
+    <div class="mb-4">
+        <h1 class="h2 mb-1">Find a doctor</h1>
+        <p class="text-body-secondary mb-0">Search by doctor name or specialization.</p>
+    </div>
+    <form class="row g-2 mb-4">
+        <div class="col-md-5"><input class="form-control" name="search" value="{{ request('search') }}" placeholder="Name or specialization"></div>
+        <div class="col-md-4"><select class="form-select" name="specialization">
+                <option value="">All specializations</option>
+                @foreach ($specializations as $specialization)
+                    <option value="{{ $specialization }}" @selected(request('specialization') === $specialization)>{{ $specialization }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-auto"><button class="btn btn-outline-primary">Search</button></div>
+    </form>
+    <div class="row g-3">
+        @forelse($doctors as $doctor)
+            <div class="col-md-6 col-xl-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body d-flex flex-column">
+                        <h2 class="h5">Dr. {{ $doctor->name }}</h2>
+                        <p class="text-primary mb-2">{{ $doctor->doctorProfile?->specialization }}</p>
+                        <p class="small text-body-secondary mb-1">{{ $doctor->doctorProfile?->experience }} years experience</p>
+                        <p class="small text-body-secondary">Consultation fee: ৳{{ number_format($doctor->doctorProfile?->consultation_fee ?? 0, 2) }}</p><a class="btn btn-primary mt-auto" href="{{ route('patient.doctors.show', $doctor) }}">View availability</a>
+                    </div>
+                </div>
+        </div>@empty<div class="col">
+                <div class="alert alert-info">No doctors match your search.</div>
+            </div>
+        @endforelse
+    </div>
+    <div class="mt-4">{{ $doctors->links() }}</div>
 @endsection

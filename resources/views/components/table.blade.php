@@ -1,1 +1,10 @@
-<div class="card shadow-sm border-0"><div class="table-responsive"><table class="table table-hover mb-0"><thead class="table-light"><tr>{{ $head }}</tr></thead><tbody>{{ $slot }}</tbody></table></div></div>
+<div class="card shadow-sm border-0">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>{{ $head }}</tr>
+            </thead>
+            <tbody>{{ $slot }}</tbody>
+        </table>
+    </div>
+</div>
